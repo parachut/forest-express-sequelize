@@ -32,3 +32,5 @@ dist
 
 # VS Code
 *.code-workspace
+
+.DS_Store

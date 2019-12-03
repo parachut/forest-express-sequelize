@@ -1,9 +1,9 @@
-const _ = require("lodash");
-const Interface = require("forest-express");
-const { ErrorHTTP422 } = require("./errors");
-const ResourceGetter = require("./resource-getter");
-const CompositeKeysManager = require("./composite-keys-manager");
-const ResourceFinder = require("./resource-finder");
+const _ = require('lodash');
+const Interface = require('forest-express');
+const { ErrorHTTP422 } = require('./errors');
+const ResourceGetter = require('./resource-getter');
+const CompositeKeysManager = require('./composite-keys-manager');
+const ResourceFinder = require('./resource-finder');
 
 function ResourceUpdater(model, params, newRecord) {
   const schema = Interface.Schemas.schemas[model.name];
@@ -12,12 +12,12 @@ function ResourceUpdater(model, params, newRecord) {
     const compositeKeysManager = new CompositeKeysManager(
       model,
       schema,
-      newRecord
+      newRecord,
     );
 
     return new ResourceFinder(model, params)
       .perform()
-      .then(record => {
+      .then((record) => {
         if (record) {
           _.forOwn(newRecord, (value, attribute) => {
             record[attribute] = value;
@@ -25,7 +25,7 @@ function ResourceUpdater(model, params, newRecord) {
 
           return record
             .validate()
-            .catch(error => {
+            .catch((error) => {
               throw new ErrorHTTP422(error.message);
             })
             .then(() => record.save());
@@ -38,7 +38,7 @@ function ResourceUpdater(model, params, newRecord) {
         }
 
         return new ResourceGetter(model, {
-          recordId: params.recordId
+          recordId: params.recordId,
         }).perform();
       });
   };
